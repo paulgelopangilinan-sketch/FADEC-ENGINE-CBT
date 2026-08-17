@@ -1,0 +1,1978 @@
+* {
+    box-sizing: border-box;
+}
+
+
+/* =====================================================
+   VARIABLES
+   ===================================================== */
+
+:root {
+
+    --bg: #05090b;
+
+    --panel: #080e11;
+
+    --panel-light: #0d1519;
+
+    --border: #2c3a3f;
+
+    --green: #00ff66;
+
+    --green-dark: #06391d;
+
+    --yellow: #ffd000;
+
+    --yellow-dark: #493b00;
+
+    --red: #ff3030;
+
+    --red-dark: #480909;
+
+    --text: #d7dedf;
+
+    --muted: #718084;
+
+    --font: "Courier New", monospace;
+
+}
+
+
+/* =====================================================
+   HTML / BODY
+   ===================================================== */
+
+html {
+
+    background: var(--bg);
+
+}
+
+
+body {
+
+    margin: 0;
+
+    min-height: 100vh;
+
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(0, 255, 102, 0.025),
+            transparent 45%
+        ),
+        #05090b;
+
+    color: var(--text);
+
+    font-family: var(--font);
+
+    font-size: 12px;
+
+}
+
+
+/* =====================================================
+   FULL SCREEN ALERT FLICKER
+   ===================================================== */
+
+/*
+   This overlay covers the ENTIRE viewport.
+
+   It does not block buttons because
+   pointer-events is disabled.
+*/
+
+#alertFlashOverlay {
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 9999;
+
+    pointer-events: none;
+
+    opacity: 0;
+
+    display: none;
+
+}
+
+
+/* =====================================================
+   CAUTION FULL SCREEN FLICKER
+   ===================================================== */
+
+body.flash-caution #alertFlashOverlay {
+
+    display: block;
+
+    animation:
+        cautionFullScreenFlash
+        0.65s
+        infinite;
+
+}
+
+
+@keyframes cautionFullScreenFlash {
+
+    0% {
+
+        opacity: 0;
+
+        background:
+            rgba(255, 208, 0, 0);
+
+        box-shadow:
+            inset 0 0 0 rgba(255, 208, 0, 0);
+
+    }
+
+
+    35% {
+
+        opacity: 0.18;
+
+        background:
+            rgba(255, 208, 0, 0.16);
+
+        box-shadow:
+            inset 0 0 70px rgba(255, 208, 0, 0.45);
+
+    }
+
+
+    50% {
+
+        opacity: 0.04;
+
+        background:
+            rgba(255, 208, 0, 0.04);
+
+    }
+
+
+    70% {
+
+        opacity: 0.20;
+
+        background:
+            rgba(255, 208, 0, 0.18);
+
+        box-shadow:
+            inset 0 0 90px rgba(255, 208, 0, 0.50);
+
+    }
+
+
+    100% {
+
+        opacity: 0;
+
+        background:
+            rgba(255, 208, 0, 0);
+
+        box-shadow:
+            inset 0 0 0 rgba(255, 208, 0, 0);
+
+    }
+
+}
+
+
+/* =====================================================
+   WARNING FULL SCREEN FLICKER
+   ===================================================== */
+
+body.flash-warning #alertFlashOverlay {
+
+    display: block;
+
+    animation:
+        warningFullScreenFlash
+        0.38s
+        infinite;
+
+}
+
+
+@keyframes warningFullScreenFlash {
+
+    0% {
+
+        opacity: 0;
+
+        background:
+            rgba(255, 48, 48, 0);
+
+        box-shadow:
+            inset 0 0 0 rgba(255, 48, 48, 0);
+
+    }
+
+
+    25% {
+
+        opacity: 0.22;
+
+        background:
+            rgba(255, 48, 48, 0.20);
+
+        box-shadow:
+            inset 0 0 80px rgba(255, 48, 48, 0.55);
+
+    }
+
+
+    45% {
+
+        opacity: 0.03;
+
+        background:
+            rgba(255, 48, 48, 0.03);
+
+    }
+
+
+    65% {
+
+        opacity: 0.25;
+
+        background:
+            rgba(255, 48, 48, 0.22);
+
+        box-shadow:
+            inset 0 0 110px rgba(255, 48, 48, 0.60);
+
+    }
+
+
+    100% {
+
+        opacity: 0;
+
+        background:
+            rgba(255, 48, 48, 0);
+
+        box-shadow:
+            inset 0 0 0 rgba(255, 48, 48, 0);
+
+    }
+
+}
+
+
+/* =====================================================
+   FLASH DISABLED
+   ===================================================== */
+
+body.flash-disabled #alertFlashOverlay {
+
+    display: none !important;
+
+}
+
+
+/* =====================================================
+   TOP HEADER
+   ===================================================== */
+
+.top-header {
+
+    min-height: 70px;
+
+    display: grid;
+
+    grid-template-columns:
+        1fr
+        auto
+        1fr;
+
+    align-items: center;
+
+    padding: 10px 18px;
+
+    border-bottom: 1px solid #354247;
+
+    background: #070c0f;
+
+}
+
+
+.brand {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+}
+
+
+.school-logo {
+
+    width: 55px;
+
+    height: 55px;
+
+    object-fit: contain;
+
+    flex-shrink: 0;
+
+}
+
+
+.brand-text {
+
+    display: flex;
+
+    flex-direction: column;
+
+}
+
+
+.brand h1 {
+
+    margin: 0;
+
+    color: #dce3e4;
+
+    font-size: 16px;
+
+    letter-spacing: 1px;
+
+}
+
+
+.brand p {
+
+    margin: 4px 0 0;
+
+    color: var(--green);
+
+    font-size: 10px;
+
+    font-weight: bold;
+
+}
+
+
+.top-status {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    color: var(--green);
+
+    font-size: 10px;
+
+    font-weight: bold;
+
+}
+
+
+.status-dot,
+.message-light {
+
+    width: 7px;
+
+    height: 7px;
+
+    display: inline-block;
+
+    border-radius: 50%;
+
+    background: var(--green);
+
+    box-shadow:
+        0 0 8px var(--green);
+
+}
+
+
+.top-divider {
+
+    width: 1px;
+
+    height: 20px;
+
+    margin: 0 10px;
+
+    background: #39464b;
+
+}
+
+
+.top-icons {
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 8px;
+
+}
+
+
+.top-icons button {
+
+    width: 45px;
+
+    padding: 4px;
+
+    border: 0;
+
+    background: transparent;
+
+    color: #cbd2d4;
+
+    cursor: pointer;
+
+}
+
+
+.top-icons button:hover {
+
+    color: var(--green);
+
+}
+
+
+.top-icons button small {
+
+    display: block;
+
+    margin-top: 3px;
+
+    font-size: 7px;
+
+    font-family: var(--font);
+
+}
+
+
+/* =====================================================
+   DASHBOARD
+   ===================================================== */
+
+.dashboard {
+
+    width: 98%;
+
+    max-width: 1600px;
+
+    margin: 0 auto;
+
+    padding: 14px 0;
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(300px, 1fr)
+        minmax(430px, 1.25fr)
+        minmax(300px, 1fr);
+
+    gap: 10px;
+
+    align-items: start;
+
+}
+
+
+.left-column,
+.center-column,
+.right-column {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+
+    min-width: 0;
+
+}
+
+
+/* =====================================================
+   GENERAL CARD
+   ===================================================== */
+
+.card {
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(15, 24, 28, 0.96),
+            rgba(6, 11, 13, 0.98)
+        );
+
+    border: 1px solid var(--border);
+
+    padding: 10px;
+
+    box-shadow:
+        inset 0 0 20px rgba(0, 0, 0, 0.35);
+
+    border-radius: 0;
+
+}
+
+
+.card-title {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    min-height: 25px;
+
+    padding-bottom: 7px;
+
+    border-bottom: 1px solid #27353a;
+
+    color: var(--green);
+
+    font-size: 11px;
+
+    font-weight: bold;
+
+}
+
+
+.card-title small {
+
+    color: #718084;
+
+    font-size: 8px;
+
+    font-weight: normal;
+
+}
+
+
+/* =====================================================
+   BUTTONS
+   ===================================================== */
+
+button {
+
+    font-family: var(--font);
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    color: #dce4e5;
+
+    background:
+        linear-gradient(
+            180deg,
+            #1b272b,
+            #0c1316
+        );
+
+    border: 1px solid #46575d;
+
+    border-radius: 1px;
+
+    transition:
+        background 0.15s,
+        border-color 0.15s,
+        box-shadow 0.15s;
+
+}
+
+
+button:hover {
+
+    border-color: var(--green);
+
+    color: var(--green);
+
+    box-shadow:
+        0 0 7px rgba(0, 255, 102, 0.12);
+
+}
+
+
+button:active {
+
+    transform: translateY(1px);
+
+}
+
+
+button:disabled {
+
+    opacity: 0.45;
+
+    cursor: not-allowed;
+
+}
+
+
+/* =====================================================
+   ENGINE CONTROL
+   ===================================================== */
+
+.control-buttons {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 6px;
+
+    margin-top: 9px;
+
+}
+
+
+.control-buttons button {
+
+    min-height: 38px;
+
+    font-size: 10px;
+
+}
+
+
+.start-button {
+
+    border-color: #168c4c;
+
+    color: var(--green);
+
+}
+
+
+.start-button:hover {
+
+    background: #07351e;
+
+}
+
+
+.stop-button {
+
+    border-color: #963333;
+
+    color: #ff5555;
+
+}
+
+
+.stop-button:hover {
+
+    background: #3b0d0d;
+
+}
+
+
+.button-light {
+
+    width: 6px;
+
+    height: 6px;
+
+    display: inline-block;
+
+    margin-right: 7px;
+
+    border-radius: 50%;
+
+}
+
+
+.green-light {
+
+    background: var(--green);
+
+    box-shadow:
+        0 0 7px var(--green);
+
+}
+
+
+.red-light {
+
+    background: #ff4040;
+
+    box-shadow:
+        0 0 7px #ff4040;
+
+}
+
+
+.reset-button {
+
+    width: 100%;
+
+    margin-top: 6px;
+
+    min-height: 37px;
+
+    font-size: 10px;
+
+}
+
+
+/* =====================================================
+   START / STOP PROGRESS
+   ===================================================== */
+
+.engine-progress {
+
+    margin-top: 10px;
+
+    padding: 9px;
+
+    border: 1px solid #304047;
+
+    background: #050a0c;
+
+}
+
+
+.engine-progress.hidden {
+
+    display: none;
+
+}
+
+
+.progress-heading {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    color: var(--green);
+
+    font-size: 9px;
+
+}
+
+
+.progress-heading strong {
+
+    font-size: 12px;
+
+}
+
+
+.progress-bar {
+
+    width: 100%;
+
+    height: 15px;
+
+    margin-top: 7px;
+
+    overflow: hidden;
+
+    background: #020506;
+
+    border: 1px solid #324148;
+
+}
+
+
+#progressFill {
+
+    width: 0%;
+
+    height: 100%;
+
+    background: var(--green);
+
+    box-shadow:
+        0 0 10px rgba(0, 255, 102, 0.5);
+
+    transition: width 1s linear;
+
+}
+
+
+.progress-time {
+
+    margin-top: 5px;
+
+    text-align: center;
+
+    color: #829093;
+
+    font-size: 9px;
+
+}
+
+
+/* =====================================================
+   AIR VOLUME
+   ===================================================== */
+
+.air-volume-card {
+
+    text-align: center;
+
+}
+
+
+.air-value {
+
+    padding: 8px 0 3px;
+
+    color: var(--green);
+
+    font-size: 25px;
+
+    font-weight: bold;
+
+    text-shadow:
+        0 0 8px rgba(0, 255, 102, 0.4);
+
+}
+
+
+.air-value small {
+
+    font-size: 11px;
+
+}
+
+
+.slider-labels,
+.slider-scale {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    color: #849195;
+
+    font-size: 8px;
+
+}
+
+
+input[type="range"] {
+
+    width: 100%;
+
+    margin: 6px 0;
+
+    accent-color: var(--green);
+
+    cursor: pointer;
+
+}
+
+
+.slider-scale {
+
+    padding: 0 2px;
+
+}
+
+
+/* =====================================================
+   GAUGES
+   ===================================================== */
+
+.gauges {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 6px;
+
+    margin-top: 9px;
+
+}
+
+
+.gauge-box {
+
+    min-height: 105px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 5px;
+
+    border: 1px solid #344249;
+
+    background: #07100d;
+
+    text-align: center;
+
+}
+
+
+.gauge {
+
+    width: 68px;
+
+    height: 68px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background:
+        conic-gradient(
+            var(--green) 0deg,
+            var(--green) 220deg,
+            #8c5200 220deg,
+            #8c5200 275deg,
+            #6b1010 275deg,
+            #6b1010 360deg
+        );
+
+    position: relative;
+
+    box-shadow:
+        0 0 10px rgba(0, 255, 102, 0.08);
+
+}
+
+
+.gauge::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 54px;
+
+    height: 54px;
+
+    border-radius: 50%;
+
+    background: #050a08;
+
+    border: 2px solid #1c3027;
+
+}
+
+
+.gauge-value {
+
+    position: relative;
+
+    z-index: 2;
+
+    color: var(--green);
+
+    font-size: 13px;
+
+    font-weight: bold;
+
+}
+
+
+.gauge-box > strong {
+
+    margin-top: 4px;
+
+    color: #d5dddd;
+
+    font-size: 8px;
+
+}
+
+
+.gauge-box > small {
+
+    margin-top: 2px;
+
+    color: var(--green);
+
+    font-size: 7px;
+
+}
+
+
+.legend {
+
+    display: flex;
+
+    justify-content: center;
+
+    gap: 14px;
+
+    padding-top: 8px;
+
+    font-size: 7px;
+
+}
+
+
+.legend span {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 4px;
+
+}
+
+
+.legend i {
+
+    width: 7px;
+
+    height: 7px;
+
+    display: inline-block;
+
+}
+
+
+.legend-normal {
+
+    background: var(--green);
+
+}
+
+
+.legend-caution {
+
+    background: var(--yellow);
+
+}
+
+
+.legend-warning {
+
+    background: var(--red);
+
+}
+
+
+/* =====================================================
+   SYSTEM STATUS
+   ===================================================== */
+
+.status-display {
+
+    margin-top: 9px;
+
+    padding: 11px;
+
+    text-align: center;
+
+    font-size: 12px;
+
+    font-weight: bold;
+
+    border: 1px solid;
+
+}
+
+
+.status-display.normal {
+
+    color: var(--green);
+
+    background: #07321d;
+
+    border-color: #168c4c;
+
+}
+
+
+.status-display.caution {
+
+    color: var(--yellow);
+
+    background: #3d3200;
+
+    border-color: #a78b00;
+
+}
+
+
+.status-display.warning {
+
+    color: #ff5252;
+
+    background: #460808;
+
+    border-color: #c22a2a;
+
+}
+
+
+.status-row {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    padding: 8px 2px;
+
+    border-bottom: 1px solid #263338;
+
+    font-size: 10px;
+
+}
+
+
+.status-row strong {
+
+    color: var(--green);
+
+}
+
+
+/* =====================================================
+   MCDU
+   ===================================================== */
+
+.mcdu {
+
+    padding: 10px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #10191d,
+            #070c0f
+        );
+
+    border: 1px solid #44535a;
+
+}
+
+
+.mcdu-top {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 3px 3px 8px;
+
+    border-bottom: 1px solid #3b474c;
+
+}
+
+
+.mcdu-top small {
+
+    color: #778487;
+
+    font-size: 7px;
+
+}
+
+
+.mcdu-top h2 {
+
+    margin: 2px 0 0;
+
+    color: #d7dddd;
+
+    font-size: 16px;
+
+    letter-spacing: 2px;
+
+}
+
+
+.mcdu-active {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+    color: var(--green);
+
+    font-size: 8px;
+
+}
+
+
+.mcdu-active span {
+
+    width: 7px;
+
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: var(--green);
+
+    box-shadow:
+        0 0 8px var(--green);
+
+}
+
+
+/* =====================================================
+   MCDU SCREEN
+   ===================================================== */
+
+.mcdu-screen {
+
+    margin-top: 10px;
+
+    min-height: 290px;
+
+    padding: 13px;
+
+    border: 1px solid #47545a;
+
+    background:
+        radial-gradient(
+            circle at center,
+            #0b180f,
+            #020704
+        );
+
+    box-shadow:
+        inset 0 0 25px rgba(0, 255, 102, 0.05);
+
+}
+
+
+.mcdu-page {
+
+    min-height: 260px;
+
+}
+
+
+.mcdu-page.hidden {
+
+    display: none;
+
+}
+
+
+.screen-heading {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    padding-bottom: 6px;
+
+    border-bottom: 1px solid #1c4c2d;
+
+    color: var(--green);
+
+    font-size: 8px;
+
+}
+
+
+.mcdu-page h3 {
+
+    margin: 12px 0 7px;
+
+    text-align: center;
+
+    color: var(--green);
+
+    font-size: 10px;
+
+    letter-spacing: 1px;
+
+}
+
+
+.screen-parameter {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    padding: 7px 3px;
+
+    border-bottom:
+        1px solid rgba(35, 89, 53, 0.55);
+
+    color: var(--green);
+
+    font-size: 9px;
+
+}
+
+
+.screen-parameter strong {
+
+    color: var(--green);
+
+}
+
+
+.screen-footer {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    margin-top: 11px;
+
+    color: var(--green);
+
+    font-size: 8px;
+
+}
+
+
+.screen-footer strong {
+
+    color: var(--green);
+
+}
+
+
+.screen-log {
+
+    min-height: 150px;
+
+    padding: 10px;
+
+    color: var(--green);
+
+    border: 1px solid #1b4b2d;
+
+    background: #030805;
+
+    font-size: 9px;
+
+    line-height: 2;
+
+}
+
+
+.screen-action {
+
+    width: 100%;
+
+    padding: 11px;
+
+    color: var(--green);
+
+}
+
+
+.diagnostic-screen {
+
+    margin-top: 10px;
+
+    padding: 14px;
+
+    border: 1px solid #236438;
+
+    color: var(--green);
+
+    background: #030805;
+
+    min-height: 80px;
+
+}
+
+
+/* =====================================================
+   MCDU MENU
+   ===================================================== */
+
+.mcdu-menu {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 5px;
+
+    margin-top: 10px;
+
+}
+
+
+.mcdu-menu button {
+
+    min-height: 27px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 5px 12px;
+
+    font-size: 7px;
+
+    color: #b8c0c2;
+
+}
+
+
+.mcdu-menu button span {
+
+    color: var(--green);
+
+}
+
+
+/* =====================================================
+   MCDU KEYBOARD
+   ===================================================== */
+
+.mcdu-keyboard {
+
+    margin-top: 10px;
+
+}
+
+
+.key-row {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(6, 1fr);
+
+    gap: 4px;
+
+    margin-bottom: 4px;
+
+}
+
+
+.key-row button {
+
+    height: 26px;
+
+    padding: 2px;
+
+    font-size: 7px;
+
+}
+
+
+/* =====================================================
+   SYSTEM MESSAGES
+   ===================================================== */
+
+.system-messages {
+
+    padding: 10px;
+
+}
+
+
+#systemMessage {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    margin-top: 9px;
+
+    padding: 8px;
+
+    border: 1px solid #1e5936;
+
+    color: var(--green);
+
+    background: #030805;
+
+    font-size: 8px;
+
+}
+
+
+.sound-status {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 9px;
+
+    border: 1px solid #26353a;
+
+    background: #060b0d;
+
+    color: #899496;
+
+    font-size: 8px;
+
+}
+
+
+.sound-status strong {
+
+    margin-left: auto;
+
+    color: var(--green);
+
+    font-size: 7px;
+
+}
+
+
+.flash-light {
+
+    background: var(--green);
+
+    box-shadow:
+        0 0 8px var(--green);
+
+}
+
+
+/* =====================================================
+   WARNING
+   ===================================================== */
+
+.warning-display {
+
+    min-height: 145px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    text-align: center;
+
+    border: 1px solid;
+
+}
+
+
+.warning-display.normal {
+
+    background: #062a18;
+
+    border-color: #177c42;
+
+}
+
+
+.warning-display.caution {
+
+    background: #3b3000;
+
+    border-color: #a27f00;
+
+    color: var(--yellow);
+
+}
+
+
+.warning-display.warning {
+
+    background: #450707;
+
+    border-color: #c72828;
+
+    color: #ff4040;
+
+}
+
+
+.warning-icon {
+
+    width: 38px;
+
+    height: 38px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    margin-bottom: 7px;
+
+    border: 1px solid currentColor;
+
+    border-radius: 50%;
+
+    font-size: 19px;
+
+}
+
+
+.warning-display h2 {
+
+    margin: 3px 0;
+
+    font-size: 13px;
+
+}
+
+
+.warning-display p {
+
+    margin: 3px 0;
+
+    font-size: 8px;
+
+}
+
+
+.ack-button {
+
+    width: 100%;
+
+    margin-top: 9px;
+
+    padding: 10px;
+
+    color: var(--yellow);
+
+    border-color: #8e7400;
+
+}
+
+
+/* =====================================================
+   RIGHT PANELS
+   ===================================================== */
+
+.right-small-card {
+
+    min-height: 90px;
+
+}
+
+
+.right-log {
+
+    margin-top: 8px;
+
+    color: #7d8b8e;
+
+    font-size: 8px;
+
+}
+
+
+#rightFaultLog {
+
+    margin-top: 8px;
+
+    color: var(--red);
+
+    line-height: 1.7;
+
+}
+
+
+.right-diagnostic {
+
+    margin-top: 8px;
+
+    padding: 11px;
+
+    border: 1px solid #1d6038;
+
+    background: #030805;
+
+    color: var(--green);
+
+    min-height: 40px;
+
+    font-size: 9px;
+
+}
+
+
+/* =====================================================
+   AIRWORTHINESS
+   ===================================================== */
+
+#airworthiness {
+
+    margin-top: 9px;
+
+    padding: 13px;
+
+    text-align: center;
+
+    border: 1px solid #1b7e42;
+
+    background: #07351d;
+
+    color: var(--green);
+
+    font-size: 12px;
+
+    font-weight: bold;
+
+}
+
+
+#airworthiness.maintenance {
+
+    color: var(--yellow);
+
+    border-color: #987c00;
+
+    background: #3b3100;
+
+}
+
+
+#airworthiness.warning {
+
+    color: #ff4c4c;
+
+    border-color: #a52323;
+
+    background: #400707;
+
+}
+
+
+/* =====================================================
+   ASSESSMENT
+   ===================================================== */
+
+.assessment p {
+
+    color: #a7b1b3;
+
+    font-size: 8px;
+
+    line-height: 1.6;
+
+}
+
+
+.assessment-button {
+
+    width: 100%;
+
+    padding: 10px;
+
+    color: var(--green);
+
+}
+
+
+.assessment-result {
+
+    margin-top: 7px;
+
+    min-height: 28px;
+
+    color: var(--green);
+
+    font-size: 8px;
+
+    line-height: 1.6;
+
+}
+
+
+/* =====================================================
+   SYSTEM GUIDE
+   ===================================================== */
+
+.guide-row {
+
+    display: grid;
+
+    grid-template-columns:
+        30px 1fr;
+
+    padding: 6px 0;
+
+    border-bottom: 1px solid #273338;
+
+    font-size: 8px;
+
+}
+
+
+.guide-row strong {
+
+    color: var(--green);
+
+}
+
+
+/* =====================================================
+   FOOTER
+   ===================================================== */
+
+.amt-footer {
+
+    width: 100%;
+
+    margin-top: 5px;
+
+    padding: 15px 10px 22px;
+
+    text-align: center;
+
+    border-top: 1px solid #27353a;
+
+    background: #05090b;
+
+    font-family: var(--font);
+
+    color: var(--green);
+
+    text-shadow:
+        0 0 7px rgba(0, 255, 102, 0.45);
+
+}
+
+
+.amt-footer strong {
+
+    display: block;
+
+    margin-bottom: 5px;
+
+    font-size: 13px;
+
+    letter-spacing: 3px;
+
+}
+
+
+.amt-footer span {
+
+    display: block;
+
+    font-size: 10px;
+
+    font-weight: bold;
+
+    letter-spacing: 2px;
+
+}
+
+
+/* =====================================================
+   MOBILE
+   ===================================================== */
+
+@media (max-width: 1100px) {
+
+    .dashboard {
+
+        grid-template-columns:
+            1fr 1fr;
+
+    }
+
+
+    .center-column {
+
+        grid-column: span 2;
+
+        grid-row: 1;
+
+    }
+
+}
+
+
+@media (max-width: 750px) {
+
+    .top-header {
+
+        grid-template-columns: 1fr;
+
+        gap: 10px;
+
+        text-align: center;
+
+    }
+
+
+    .brand {
+
+        justify-content: center;
+
+    }
+
+
+    .top-icons {
+
+        justify-content: center;
+
+        flex-wrap: wrap;
+
+    }
+
+
+    .dashboard {
+
+        width: 96%;
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .center-column {
+
+        grid-column: auto;
+
+        grid-row: auto;
+
+    }
+
+
+    .control-buttons {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .gauges {
+
+        grid-template-columns:
+            1fr 1fr;
+
+    }
+
+}

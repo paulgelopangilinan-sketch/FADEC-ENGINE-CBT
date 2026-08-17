@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AMT 107 - FADEC Engine CBT Simulator</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- =====================================================
+     FULL SCREEN ALERT FLASH
+     ===================================================== -->
+
+<div id="alertFlashOverlay"></div>
+
+
+<!-- =====================================================
+     TOP HEADER
+     ===================================================== -->
+
+<header class="top-header">
+
+    <div class="brand">
+
+        <img
+            src="./logo.png"
+            alt="DPR Aviation College Logo"
+            class="school-logo"
+        >
+
+        <div class="brand-text">
+
+            <h1>FADEC ENGINE CBT SIMULATOR</h1>
+
+            <p>FULL AUTHORITY DIGITAL ENGINE CONTROL</p>
+
+        </div>
+
+    </div>
+
+
+    <div class="top-status">
+
+        <span class="status-dot"></span>
+
+        <span id="topEngineStatus">
+            ENGINE STATUS: STOPPED
+        </span>
+
+        <span class="top-divider"></span>
+
+        <span class="status-dot"></span>
+
+        <span>
+            FADEC STATUS:
+            <strong id="topFadecStatus">OFF</strong>
+        </span>
+
+    </div>
+
+
+    <div class="top-icons">
+
+        <button onclick="toggleSound()" title="Sound">
+            🔊
+            <small>SOUND</small>
+        </button>
+
+        <button onclick="toggleFlashing()" title="Flash">
+            ⚡
+            <small>FLASH</small>
+        </button>
+
+        <button onclick="goHome()" title="Home">
+            🏠
+            <small>HOME</small>
+        </button>
+
+        <button onclick="showHelp()" title="Help">
+            ?
+            <small>HELP</small>
+        </button>
+
+        <button onclick="exitSimulator()" title="Exit">
+            ⏻
+            <small>EXIT</small>
+        </button>
+
+    </div>
+
+</header>
+
+
+<!-- =====================================================
+     MAIN DASHBOARD
+     ===================================================== -->
+
+<main class="dashboard">
+
+
+    <!-- =================================================
+         LEFT COLUMN
+         ================================================= -->
+
+    <section class="left-column">
+
+
+        <!-- ENGINE CONTROL -->
+
+        <div class="card engine-control">
+
+            <div class="card-title">
+
+                <span>ENGINE CONTROL</span>
+
+                <small>CTRL-01</small>
+
+            </div>
+
+
+            <div class="control-buttons">
+
+                <button
+                    id="startBtn"
+                    class="start-button"
+                >
+
+                    <span class="button-light green-light"></span>
+
+                    START ENGINE
+
+                </button>
+
+
+                <button
+                    id="stopBtn"
+                    class="stop-button"
+                >
+
+                    <span class="button-light red-light"></span>
+
+                    STOP ENGINE
+
+                </button>
+
+            </div>
+
+
+            <button
+                id="resetBtn"
+                class="reset-button"
+            >
+
+                RESET / RETEST
+
+            </button>
+
+
+            <!-- START / STOP PROGRESS -->
+
+            <div
+                id="engineProgress"
+                class="engine-progress hidden"
+            >
+
+                <div class="progress-heading">
+
+                    <span id="progressAction">
+                        ENGINE STARTING
+                    </span>
+
+                    <strong id="progressPercent">
+                        0%
+                    </strong>
+
+                </div>
+
+
+                <div class="progress-bar">
+
+                    <div id="progressFill"></div>
+
+                </div>
+
+
+                <div class="progress-time">
+
+                    <span id="progressTime">
+                        0 / 8 seconds
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- AIR VOLUME -->
+
+        <div class="card air-volume-card">
+
+            <div class="card-title">
+
+                <span>AIR VOLUME INPUT</span>
+
+                <small>INPUT</small>
+
+            </div>
+
+
+            <div class="air-value">
+
+                <span id="airVolumeValue">
+                    50
+                </span>
+
+                <small>%</small>
+
+            </div>
+
+
+            <div class="slider-labels">
+
+                <span>LOW</span>
+                <span>HIGH</span>
+
+            </div>
+
+
+            <input
+                type="range"
+                id="airVolume"
+                min="0"
+                max="100"
+                value="50"
+            >
+
+
+            <div class="slider-scale">
+
+                <span>0</span>
+                <span>25</span>
+                <span>50</span>
+                <span>75</span>
+                <span>100</span>
+
+            </div>
+
+        </div>
+
+
+        <!-- ENGINE PARAMETERS -->
+
+        <div class="card parameters-card">
+
+            <div class="card-title">
+
+                <span>ENGINE PARAMETERS</span>
+
+                <small>LIVE DATA</small>
+
+            </div>
+
+
+            <div class="gauges">
+
+
+                <div class="gauge-box">
+
+                    <div class="gauge">
+
+                        <div
+                            class="gauge-value"
+                            id="gaugeN1"
+                        >
+                            0.0
+                        </div>
+
+                    </div>
+
+                    <strong>N1</strong>
+
+                    <small id="gaugeN1Status">
+                        STOPPED
+                    </small>
+
+                </div>
+
+
+                <div class="gauge-box">
+
+                    <div class="gauge">
+
+                        <div
+                            class="gauge-value"
+                            id="gaugeN2"
+                        >
+                            0.0
+                        </div>
+
+                    </div>
+
+                    <strong>N2</strong>
+
+                    <small id="gaugeN2Status">
+                        STOPPED
+                    </small>
+
+                </div>
+
+
+                <div class="gauge-box">
+
+                    <div class="gauge">
+
+                        <div
+                            class="gauge-value"
+                            id="gaugeEGT"
+                        >
+                            0
+                        </div>
+
+                    </div>
+
+                    <strong>EGT</strong>
+
+                    <small id="gaugeEGTStatus">
+                        NORMAL
+                    </small>
+
+                </div>
+
+
+                <div class="gauge-box">
+
+                    <div class="gauge">
+
+                        <div
+                            class="gauge-value"
+                            id="gaugePressure"
+                        >
+                            0.0
+                        </div>
+
+                    </div>
+
+                    <strong>PRESS</strong>
+
+                    <small id="gaugePressureStatus">
+                        NORMAL
+                    </small>
+
+                </div>
+
+
+                <div class="gauge-box">
+
+                    <div class="gauge">
+
+                        <div
+                            class="gauge-value"
+                            id="gaugeFuel"
+                        >
+                            0
+                        </div>
+
+                    </div>
+
+                    <strong>FUEL FLOW</strong>
+
+                    <small id="gaugeFuelStatus">
+                        NORMAL
+                    </small>
+
+                </div>
+
+
+                <div class="gauge-box">
+
+                    <div class="gauge">
+
+                        <div
+                            class="gauge-value"
+                            id="gaugeAirflow"
+                        >
+                            0.00
+                        </div>
+
+                    </div>
+
+                    <strong>AIRFLOW</strong>
+
+                    <small id="gaugeAirflowStatus">
+                        NORMAL
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <div class="legend">
+
+                <span>
+                    <i class="legend-normal"></i>
+                    NORMAL
+                </span>
+
+                <span>
+                    <i class="legend-caution"></i>
+                    CAUTION
+                </span>
+
+                <span>
+                    <i class="legend-warning"></i>
+                    WARNING
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- SYSTEM STATUS -->
+
+        <div class="card system-status-card">
+
+            <div class="card-title">
+
+                <span>SYSTEM STATUS</span>
+
+                <small>STATUS</small>
+
+            </div>
+
+
+            <div
+                id="statusBox"
+                class="status-display normal"
+            >
+                SYSTEM NORMAL
+            </div>
+
+
+            <div class="status-row">
+
+                <span>FADEC</span>
+
+                <strong id="fadecStatus">
+                    OFF
+                </strong>
+
+            </div>
+
+
+            <div class="status-row">
+
+                <span>ENGINE</span>
+
+                <strong id="engineStatus">
+                    STOPPED
+                </strong>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =================================================
+         CENTER COLUMN
+         ================================================= -->
+
+    <section class="center-column">
+
+
+        <!-- MCDU -->
+
+        <div class="mcdu">
+
+            <div class="mcdu-top">
+
+                <div>
+
+                    <small>
+                        AIRCRAFT SYSTEM
+                    </small>
+
+                    <h2>MCDU</h2>
+
+                </div>
+
+
+                <div class="mcdu-active">
+
+                    <span></span>
+
+                    ACTIVE
+
+                </div>
+
+            </div>
+
+
+            <!-- MCDU SCREEN -->
+
+            <div class="mcdu-screen">
+
+
+                <!-- ENGINE PAGE -->
+
+                <div
+                    id="enginePage"
+                    class="mcdu-page"
+                >
+
+                    <div class="screen-heading">
+
+                        <span>
+                            ENGINE CONTROL
+                        </span>
+
+                        <strong>
+                            CBT
+                        </strong>
+
+                    </div>
+
+
+                    <h3>
+                        ENGINE PARAMETERS
+                    </h3>
+
+
+                    <div class="screen-parameter">
+
+                        <span>N1</span>
+
+                        <strong id="n1">
+                            0.0 %
+                        </strong>
+
+                    </div>
+
+
+                    <div class="screen-parameter">
+
+                        <span>N2</span>
+
+                        <strong id="n2">
+                            0.0 %
+                        </strong>
+
+                    </div>
+
+
+                    <div class="screen-parameter">
+
+                        <span>EGT</span>
+
+                        <strong id="egt">
+                            0 °C
+                        </strong>
+
+                    </div>
+
+
+                    <div class="screen-parameter">
+
+                        <span>PRESSURE</span>
+
+                        <strong id="pressure">
+                            0.0 PSI
+                        </strong>
+
+                    </div>
+
+
+                    <div class="screen-parameter">
+
+                        <span>FUEL FLOW</span>
+
+                        <strong id="fuelFlow">
+                            0 KG/H
+                        </strong>
+
+                    </div>
+
+
+                    <div class="screen-parameter">
+
+                        <span>AIRFLOW</span>
+
+                        <strong id="airflow">
+                            0.00 KG/S
+                        </strong>
+
+                    </div>
+
+
+                    <div class="screen-footer">
+
+                        <span>
+                            FADEC:
+                            <strong id="screenFadec">
+                                OFF
+                            </strong>
+                        </span>
+
+                        <span>
+                            ENGINE:
+                            <strong id="screenEngine">
+                                STOPPED
+                            </strong>
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- FADEC PAGE -->
+
+                <div
+                    id="fadecPage"
+                    class="mcdu-page hidden"
+                >
+
+                    <div class="screen-heading">
+
+                        <span>
+                            FADEC STATUS
+                        </span>
+
+                        <strong>
+                            CBT
+                        </strong>
+
+                    </div>
+
+
+                    <h3>
+                        FADEC SYSTEM
+                    </h3>
+
+
+                    <div class="screen-parameter">
+
+                        <span>FADEC</span>
+
+                        <strong id="fadecPageStatus">
+                            OFF
+                        </strong>
+
+                    </div>
+
+
+                    <div class="screen-parameter">
+
+                        <span>SENSORS</span>
+
+                        <strong id="sensorStatus">
+                            NORMAL
+                        </strong>
+
+                    </div>
+
+
+                    <div class="screen-parameter">
+
+                        <span>FAULT STATUS</span>
+
+                        <strong id="faultStatus">
+                            NONE
+                        </strong>
+
+                    </div>
+
+
+                    <div class="screen-parameter">
+
+                        <span>SYSTEM</span>
+
+                        <strong id="systemStatus">
+                            NORMAL
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <!-- FAULT PAGE -->
+
+                <div
+                    id="faultPage"
+                    class="mcdu-page hidden"
+                >
+
+                    <div class="screen-heading">
+
+                        <span>
+                            FAULT LOG
+                        </span>
+
+                        <strong>
+                            CBT
+                        </strong>
+
+                    </div>
+
+
+                    <h3>
+                        RECORDED FAULTS
+                    </h3>
+
+
+                    <div
+                        id="faultLog"
+                        class="screen-log"
+                    >
+                        NO FAULTS RECORDED
+                    </div>
+
+                </div>
+
+
+                <!-- DIAGNOSTIC PAGE -->
+
+                <div
+                    id="diagnosticPage"
+                    class="mcdu-page hidden"
+                >
+
+                    <div class="screen-heading">
+
+                        <span>
+                            DIAGNOSTICS
+                        </span>
+
+                        <strong>
+                            TEST
+                        </strong>
+
+                    </div>
+
+
+                    <h3>
+                        SYSTEM DIAGNOSTIC
+                    </h3>
+
+
+                    <button
+                        onclick="runDiagnostic()"
+                        class="screen-action"
+                    >
+                        RUN DIAGNOSTIC
+                    </button>
+
+
+                    <div
+                        id="diagnosticResult"
+                        class="diagnostic-screen"
+                    >
+                        READY
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- MCDU MENU -->
+
+            <div class="mcdu-menu">
+
+                <button onclick="showPage('engine')">
+                    ENGINE
+                    <span>ENGINE</span>
+                </button>
+
+                <button onclick="showPage('engine')">
+                    ENGINE
+                    <span>›</span>
+                </button>
+
+                <button onclick="showPage('fadec')">
+                    FADEC
+                    <span>FADEC</span>
+                </button>
+
+                <button onclick="showPage('fadec')">
+                    FADEC
+                    <span>›</span>
+                </button>
+
+                <button onclick="showPage('fault')">
+                    FAULT
+                    <span>FAULT LOG</span>
+                </button>
+
+                <button onclick="showPage('fault')">
+                    FAULT
+                    <span>›</span>
+                </button>
+
+                <button onclick="showPage('diagnostic')">
+                    DIAG
+                    <span>TEST</span>
+                </button>
+
+                <button onclick="showPage('diagnostic')">
+                    DIAG
+                    <span>›</span>
+                </button>
+
+            </div>
+
+
+            <!-- MCDU KEYBOARD -->
+
+            <div class="mcdu-keyboard">
+
+                <div class="key-row">
+
+                    <button>DIR</button>
+                    <button>PROG</button>
+                    <button>PERF</button>
+                    <button>INIT</button>
+                    <button>DATA</button>
+                    <button>F-PLAN</button>
+
+                </div>
+
+
+                <div class="key-row">
+
+                    <button>1</button>
+                    <button>2</button>
+                    <button>3</button>
+                    <button>4</button>
+                    <button>5</button>
+                    <button>6</button>
+
+                </div>
+
+
+                <div class="key-row">
+
+                    <button>7</button>
+                    <button>8</button>
+                    <button>9</button>
+                    <button>CLR</button>
+                    <button>DEL</button>
+                    <button>OVFY</button>
+
+                </div>
+
+
+                <div class="key-row">
+
+                    <button>A</button>
+                    <button>B</button>
+                    <button>C</button>
+                    <button>D</button>
+                    <button>E</button>
+                    <button>F</button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- SYSTEM MESSAGES -->
+
+        <div class="card system-messages">
+
+            <div class="card-title">
+
+                <span>SYSTEM MESSAGES</span>
+
+                <small>MSG</small>
+
+            </div>
+
+
+            <div id="systemMessage">
+
+                <span class="message-light"></span>
+
+                SYSTEM READY
+
+            </div>
+
+        </div>
+
+
+        <!-- SOUND STATUS -->
+
+        <div class="sound-status">
+
+            <span class="message-light"></span>
+
+            <span>SOUND SYSTEM</span>
+
+            <strong id="soundStatus">
+                ENABLED
+            </strong>
+
+        </div>
+
+
+        <!-- FLASH STATUS -->
+
+        <div class="sound-status flash-status">
+
+            <span class="message-light flash-light"></span>
+
+            <span>FLASH SYSTEM</span>
+
+            <strong id="flashStatus">
+                ENABLED
+            </strong>
+
+        </div>
+
+    </section>
+
+
+    <!-- =================================================
+         RIGHT COLUMN
+         ================================================= -->
+
+    <section class="right-column">
+
+
+        <!-- WARNING -->
+
+        <div class="card warning-card">
+
+            <div class="card-title">
+
+                <span>
+                    WARNING / CAUTION
+                </span>
+
+                <small>
+                    ECAM
+                </small>
+
+            </div>
+
+
+            <div
+                id="warningSign"
+                class="warning-display normal"
+            >
+
+                <div class="warning-icon">
+                    !
+                </div>
+
+                <h2 id="warningTitle">
+                    SYSTEM NORMAL
+                </h2>
+
+                <p id="warningMessage">
+                    ALL PARAMETERS WITHIN LIMITS
+                </p>
+
+            </div>
+
+
+            <button
+                id="ackBtn"
+                onclick="acknowledgeWarning()"
+                class="ack-button"
+            >
+                ACKNOWLEDGE WARNING
+            </button>
+
+        </div>
+
+
+        <!-- FAULT LOG -->
+
+        <div class="card right-small-card">
+
+            <div class="card-title">
+
+                <span>
+                    FAULT LOG
+                </span>
+
+                <small id="faultCount">
+                    0 / LOG
+                </small>
+
+            </div>
+
+
+            <div class="right-log">
+
+                <span>
+                    ACTIVE FAULTS
+                </span>
+
+
+                <div id="rightFaultLog">
+                    NO ACTIVE FAULTS
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- DIAGNOSTIC -->
+
+        <div class="card right-small-card">
+
+            <div class="card-title">
+
+                <span>
+                    DIAGNOSTIC RESULT
+                </span>
+
+                <small>
+                    TEST
+                </small>
+
+            </div>
+
+
+            <div
+                id="rightDiagnostic"
+                class="right-diagnostic"
+            >
+                READY
+            </div>
+
+        </div>
+
+
+        <!-- AIRWORTHINESS -->
+
+        <div class="card airworthiness-card">
+
+            <div class="card-title">
+
+                <span>
+                    ENGINE AIRWORTHINESS
+                </span>
+
+                <small>
+                    DECISION
+                </small>
+
+            </div>
+
+
+            <div id="airworthiness">
+                AIRWORTHY
+            </div>
+
+        </div>
+
+
+        <!-- CBT ASSESSMENT -->
+
+        <div class="card assessment">
+
+            <div class="card-title">
+
+                <span>
+                    CBT ASSESSMENT
+                </span>
+
+                <small>
+                    TRAINING
+                </small>
+
+            </div>
+
+
+            <p>
+                Change the air volume and observe the
+                simulated engine response.
+            </p>
+
+
+            <button
+                onclick="startAssessment()"
+                class="assessment-button"
+            >
+                START ASSESSMENT
+            </button>
+
+
+            <div
+                id="assessmentResult"
+                class="assessment-result"
+            ></div>
+
+        </div>
+
+
+        <!-- SYSTEM GUIDE -->
+
+        <div class="card system-guide">
+
+            <div class="card-title">
+
+                <span>
+                    SYSTEM GUIDE
+                </span>
+
+                <small>
+                    INFO
+                </small>
+
+            </div>
+
+
+            <div class="guide-row">
+
+                <strong>01</strong>
+
+                <span>
+                    Start the engine.
+                </span>
+
+            </div>
+
+
+            <div class="guide-row">
+
+                <strong>02</strong>
+
+                <span>
+                    Adjust air volume.
+                </span>
+
+            </div>
+
+
+            <div class="guide-row">
+
+                <strong>03</strong>
+
+                <span>
+                    Monitor parameters.
+                </span>
+
+            </div>
+
+
+            <div class="guide-row">
+
+                <strong>04</strong>
+
+                <span>
+                    Check FADEC warnings.
+                </span>
+
+            </div>
+
+
+            <div class="guide-row">
+
+                <strong>05</strong>
+
+                <span>
+                    Run diagnostics.
+                </span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- =====================================================
+     FOOTER
+     ===================================================== -->
+
+<footer class="amt-footer">
+
+    <strong>
+        AMT 107
+    </strong>
+
+    <span>
+        FADEC ENGINE CBT SIMULATOR
+    </span>
+
+</footer>
+
+
+<!-- =====================================================
+     AUDIO
+     ===================================================== -->
+
+<audio
+    id="inputSound"
+    src="./sounds/input.mp3"
+></audio>
+
+
+<audio
+    id="cautionSound"
+    src="./sounds/caution.mp3"
+></audio>
+
+
+<audio
+    id="warningSound"
+    src="./sounds/warning.mp3"
+></audio>
+
+
+<audio
+    id="startEngineSound"
+    src="./sounds/start-engine.mp3"
+></audio>
+
+
+<audio
+    id="stopEngineSound"
+    src="./sounds/stop-engine.mp3"
+></audio>
+
+
+<script src="script.js"></script>
+
+</body>
+</html>
